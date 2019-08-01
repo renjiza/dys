@@ -1,0 +1,146 @@
+@import '~normalize.css/normalize';
+$ns: ns;
+@import '~@blueprintjs/core/lib/scss/variables.scss';
+@import "~@blueprintjs/core/src/blueprint.scss";
+@import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+
+@font-face {
+   font-family: 'Open Sans';
+   font-style: normal;
+   font-weight: 500;
+   src: url('./fonts/Open Sans.ttf');
+   src: url('./fonts/Open Sans.ttf') format('truetype');
+}
+
+// ========================================= START restyle core blueprint ==========================================
+
+.#{$ns}-navbar {
+	position: sticky;
+	top: 0;
+	border-bottom: 1px solid $light-gray5;
+	box-shadow: 0 1px 15px $light-gray4;
+}
+
+.#{$ns}-menu-item:hover {
+	background-color: $indigo4;
+	color: $white;
+}
+.#{$ns}-menu-item:hover > .#{$ns}-icon {
+	color: $white;
+}
+
+.#{$ns}-tooltip {
+	user-select: none;
+}
+
+.#{$ns}-button:focus {
+	outline: none;
+}
+
+.#{$ns}-input {
+	box-shadow: none;
+	border: 1px solid $indigo5;
+}
+
+.#{$ns}-card {
+	box-shadow: 0 1px 15px $light-gray4;
+}
+
+table.#{$ns}-html-table th {
+	color: $gray3;
+	font-weight: normal;
+	background-color: #f4f8f9;
+	position: sticky;
+	top: 0;
+}
+
+table.#{$ns}-html-table tbody tr:first-child td {
+	box-shadow: none;
+}
+
+// ========================================= END restyle core blueprint ==========================================
+
+*:focus {
+    outline: none;
+}
+
+a, a:hover {
+	text-decoration: none;
+	color: inherit;
+}
+
+body {
+	font-family: "Open Sans";
+	// -webkit-text-stroke: #fff 0px 1px 1px;
+	text-rendering: optimizeLegibility;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+	padding: 0;
+	margin: 0;
+	background-color: #f4f8f9;
+}
+
+.wrapInline {
+	display: flex;
+	height: calc(100vh - 50px);
+	width: 100%;
+}
+
+.wrapSidebar {
+	width: 300px;
+	height: 100%;
+	margin-left: -300px;
+	transition: margin .5s cubic-bezier(0, 0, 0, 0.98);
+}
+
+.wrapper-active {	
+	margin-left: 0;
+}
+
+.wrapRouter {
+	width: 100%;
+	height: calc(100vh - 50px);
+}
+
+.wrapHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	margin-bottom: 1rem;
+}
+
+.wrapTableview {	
+	overflow-y: auto;
+	height: calc(100vh - 170px);
+}
+
+.wrapTableview tbody {
+	background-color: $white;
+}
+
+.ds-container {
+	margin: 1%;
+	height: calc(100% - 30px);
+}
+
+.sidebar {
+	width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+.loginbox {
+	max-width: 50rem;
+    background-color: $white;
+    padding: 30px;
+    border-radius: 5px;
+    border: 1px solid $light-gray5;
+    box-shadow: 0 1px 15px $light-gray4;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+@import 'reflex.min.css';
