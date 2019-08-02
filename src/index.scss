@@ -60,6 +60,18 @@ table.#{$ns}-html-table tbody tr:first-child td {
 
 // ========================================= END restyle core blueprint ==========================================
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+ 
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, .05);
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: $indigo4; 
+}
+
 *:focus {
     outline: none;
 }
@@ -112,7 +124,7 @@ body {
 
 .wrapTableview {	
 	overflow-y: auto;
-	height: calc(100vh - 170px);
+	height: calc(100vh - 192px);
 }
 
 .wrapTableview tbody {
@@ -137,6 +149,11 @@ body {
     border-radius: 5px;
     border: 1px solid $light-gray5;
     box-shadow: 0 1px 15px $light-gray4;
+}
+
+.form {
+	overflow-y: auto;
+	height: calc(100vh - 107px);
 }
 
 .bold {

@@ -3,6 +3,7 @@ import { Navbar, NavbarGroup, NavbarHeading, Button, Icon, Colors, Popover, Menu
 import { Observer, observer } from 'mobx-react-lite';
 
 import global from '../stores/globalstore';
+import { login } from '../templates/login';
 import { Link } from 'react-router-dom';
 
 
@@ -16,7 +17,7 @@ const Header = observer(() => (
 
 const UserContext = () => {
     const logout = () => {
-        global._logout()
+        login._logout()
     }
     return (
         <Menu>

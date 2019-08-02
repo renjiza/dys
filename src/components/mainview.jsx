@@ -37,8 +37,8 @@ export class TableView extends PureComponent {
         this.props.params._getAll()
     }
 
-    render() {
-        const { head, order, query, id, label, privilege, _delete, access } = this.props.params
+    render() {        
+        const { head, order, query, id, label, privilege, _delete } = this.props.params
         const display = order.map(o => o.column)
         return (
             <div className="wrapTableview">                
@@ -53,54 +53,54 @@ export class TableView extends PureComponent {
                         </tr>
                     </thead>
                     <tbody>
-                            <Observer>{() =>                            
-                                <>                                    
-                                    {this.props.params.body
-                                    .filter(data => {
-                                        return display.some(key => {
-                                            return data[key].toLowerCase().includes(query.filter.toLowerCase())
-                                        })
+                        <Observer>{() =>                            
+                            <>                                    
+                                {this.props.params.body
+                                .filter(data => {
+                                    return display.some(key => {
+                                        return data[key].toLowerCase().includes(query.filter.toLowerCase())
                                     })
-                                    .map((data, index) => (
-                                        <tr key={data[id]}>
-                                            <td>{index + 1}</td>
-                                            {head.map(x => (
-                                                <td key={x.column}>{x.render ? x.render(data[x.column]) : data[x.column]}</td>
-                                            ))}
-                                            <td>
-                                                <ButtonAction 
-                                                    icon="layout-linear" 
-                                                    intent="primary" 
-                                                    position="bottom-right"
-                                                    useArrow={false}
-                                                    content={<DataContext context={privilege} data={data} usePrivilege={true} access={access} />} 
-                                                />
-                                                <Confirm 
-                                                    isOpen={data.isShowConfirm}
-                                                    text={<>Yakin tetap menghapus <b>{data[label]}</b> ?</>}
-                                                    icon="trash" 
-                                                    intent="danger" 
-                                                    confirmText="Hapus" 
-                                                    cancelText="Batal" 
-                                                    onConfirm={() => _delete(data[id], data[label])}
-                                                    onCancel={() => data.isShowConfirm = false} />
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    {this.props.params.body
-                                    .filter(data => {
-                                        return display.some(key => {
-                                            return data[key].toLowerCase().includes(query.filter.toLowerCase())
-                                        })
-                                    }).length === 0 
-                                    &&  <tr style={{ backgroundColor: '#f4f8f9' }}>
-                                            <td colSpan={head.length + 2} style={{ textAlign: 'center', color: Colors.RED3 }}>
-                                                <Icon icon="database" /> No Data
-                                            </td>
-                                        </tr>
-                                    }
-                                </>
-                            }</Observer>
+                                })
+                                .map((data, index) => (
+                                    <tr key={data[id]}>
+                                        <td>{index + 1}</td>
+                                        {head.map(x => (
+                                            <td key={x.column}>{x.render ? x.render(data[x.column]) : data[x.column]}</td>
+                                        ))}
+                                        <td>
+                                            <ButtonAction 
+                                                icon="layout-linear" 
+                                                intent="primary" 
+                                                position="bottom-right"
+                                                useArrow={false}
+                                                content={<ActionContext data={data} usePrivilege={true} privilege={privilege} access={this.props.access} />} 
+                                            />
+                                            <Confirm 
+                                                isOpen={data.isShowConfirm}
+                                                text={<>Yakin tetap menghapus <b>{data[label]}</b> ?</>}
+                                                icon="trash" 
+                                                intent="danger" 
+                                                confirmText="Hapus" 
+                                                cancelText="Batal" 
+                                                onConfirm={() => _delete(data[id], data[label])}
+                                                onCancel={() => data.isShowConfirm = false} />
+                                        </td>
+                                    </tr>
+                                ))}
+                                {this.props.params.body
+                                .filter(data => {
+                                    return display.some(key => {
+                                        return data[key].toLowerCase().includes(query.filter.toLowerCase())
+                                    })
+                                }).length === 0 
+                                &&  <tr style={{ backgroundColor: '#f4f8f9' }}>
+                                        <td colSpan={head.length + 2} style={{ textAlign: 'center', color: Colors.RED3 }}>
+                                            <Icon icon="database" /> No Data
+                                        </td>
+                                    </tr>
+                                }
+                            </>
+                        }</Observer>
                     </tbody>
                 </HTMLTable>
             </div>
@@ -132,9 +132,9 @@ const Context = ({ context }) => (
     </Menu>
 )
 
-const DataContext = ({ context, data, usePrivilege, access = [] }) => (
+const ActionContext = ({ data, privilege, usePrivilege, access = [] }) => (
     <Menu>
-        {context.length > 0 && context.map((o, i) => (
+        {privilege.length > 0 && privilege.map((o, i) => (
             usePrivilege ? 
             (access.indexOf(o.key) !== -1 && <MenuItem key={i} onClick={() => o.action(data)} icon={o.icon} text={o.label} />)
             :

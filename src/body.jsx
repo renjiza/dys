@@ -7,15 +7,14 @@ import Topbar from './components/topbar';
 import Generalbar from './components/generalbar';
 import Sidebar from './components/sidebar';
 
-import global from './stores/globalstore';
+import { login } from './templates/login';
 
 
 class Body extends PureComponent {
 
     componentWillMount() {
         if (getSession()) {
-            global._checkSession()
-            global._getMenuUser()
+            login._checkSession()
             console.log('u are logged in !')
         } else {
             this.props.history.replace("/login")

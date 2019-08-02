@@ -4,14 +4,14 @@ import { Navbar, NavbarHeading, NavbarGroup, Tooltip, Colors, AnchorButton, Icon
 export default class Generalbar extends PureComponent {
 
     componentDidMount() {
-        document.title = "DS Sources"
+        document.title = "DYS Resources"
     }
 
     render() {
         return (
             <Navbar>
                 <NavbarGroup align="left">
-                    <NavbarHeading className="bold" style={{ color: Colors.INDIGO3 }}>DS Sources</NavbarHeading>
+                    <NavbarHeading className="bold" style={{ color: Colors.INDIGO3 }}>DYS Resources</NavbarHeading>
                 </NavbarGroup>
                 <NavbarGroup align="right">
                     <Tooltip content={`kunjungi website`} position="right" usePortal={false}>

@@ -1,20 +1,19 @@
 import React, { PureComponent } from 'react';
-import { Colors } from '@blueprintjs/core';
 import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 
 import { get, del, post, put } from '../../components/xhr';
 import { HeaderView, TableView, toast, ToolView } from '../../components/mainview';
+import { PageUnauthorized } from '../../components/async';
 import history from '../../components/history';
 import global from '../../stores/globalstore';
-import { PageUnauthorized } from '../../components/async';
-import { Observer } from 'mobx-react';
 
 
 export const user = observable({
+    title: "User",
     head: [
         { label: 'Email', column: 'userEmail' },
         { label: 'Nama Lengkap', column: 'userFullname' },
-        { label: 'Status Aktif', column: 'userActive', render: o => o === 1 ? 'Aktif' : 'Non-aktif' },
     ],
     order: [
         { label: 'Email', column: 'userEmail', action: () => { 
@@ -25,16 +24,15 @@ export const user = observable({
             }
         }},
         { label: 'Nama Lengkap', column: 'userFullname', action: () => { 
-            if (user.query.order !== "userEmail") {
+            if (user.query.order !== "userFullname") {
                 user.query.order = "userFullname"
                 user.query.orderLabel = "Nama Lengkap"
                 user._getAll()
             }
         }},
     ],
-    access: [],
     privilege: [
-        { label: 'Ubah', key: 'edit', icon: 'edit', action: o => history.replace(`/user/edit/${o.userId}`) },
+        { label: 'Ubah', key: 'edit', icon: 'edit', action: o => history.replace(`edit/${o.userId}`) },
         { label: 'Hapus', key: 'delete', icon: 'trash', action: o => o.isShowConfirm = true },
     ],
     query: {
@@ -43,21 +41,14 @@ export const user = observable({
         orderLabel: 'Nama Lengkap',
         sort: 'asc',
     },
-    menu: global.getMenuInfo('/user'),
     body: [],
     id: 'userId',
-    label: 'userEmail',
+    label: 'userFullname',
+    inputOld: {},
     input: {
         userFullname: '',
         userEmail: '',
         userPassword: '',
-        userActive: 0,
-    },
-    async _callPrivilege() {
-        get('getPrivilege', { link: '/user' })
-        .then(res => {
-            user.access = res.response.map(o => o.menuAction)
-        })
     },
     async _getAll() {
         get('user', user.query)
@@ -68,13 +59,15 @@ export const user = observable({
         })
     },
     async _getById(id) {
-        get(`user/${id}`, { q: JSON.stringify({ column: 'userId AS id, userEmail, userFullname, userActive' }) })
+        get(`user/${id}`, { q: JSON.stringify({ column: 'userId AS id, userEmail, userFullname, userPassword' }) })
         .then(res => {
             user.input = res.response
+            user.inputOld = res.response
         })
     },
     async _create() {
-        user.input.logDetail = JSON.stringify(user.input)
+        const logDetail = JSON.stringify(user.input)
+        user.input.logDetail = logDetail
         post('user', user.input)
         .then(res => {
             if (res.error === null && res.response !== null) {
@@ -82,7 +75,6 @@ export const user = observable({
                     userFullname: '',
                     userEmail: '',
                     userPassword: '',
-                    userActive: 0,
                 }
                 toast.show({ message: res.response, intent: 'success', icon: 'tick-circle' })
             } else {
@@ -91,6 +83,8 @@ export const user = observable({
         })
     },
     async _update() {
+        const logDetail = global.takeDiff(user.input, user.inputOld)
+        user.input.logDetail = logDetail
         put('user', user.input)
         .then(res => {
             if (res.error === null && res.response !== null) {
@@ -98,7 +92,6 @@ export const user = observable({
                     userFullname: '',
                     userEmail: '',
                     userPassword: '',
-                    userActive: 0,
                 }
                 toast.show({ message: res.response, intent: 'success', icon: 'tick-circle' })
                 history.replace('/user/view')
@@ -121,34 +114,33 @@ export const user = observable({
 })
 
 
-export default class UserView extends PureComponent {
+class UserView extends PureComponent {
 
     componentDidMount() {
-        document.title = user.menu.menuLabel                
-        user._callPrivilege()
-    }
-    
+        document.title = `${user.title} | ${global.appname}`        
+    }    
     
     render() {
+        const menu = global.menu.filter(o => o.menuLink === '/user').map(o => o.menuAction)
+
         return (
-            <Observer>{() =>
-                user.access.indexOf('view') !== -1 ?
-                <div className = "ds-container" >
-                    <HeaderView
-                        title={`List ${user.menu.menuLabel}`}
-                        btnTooltip={`Tambah ${user.menu.menuLabel}`}
-                        btnIcon="add"
-                        color={Colors.FOREST3}
-                        intent="success"
-                        btnShow={user.access.indexOf('add') !== -1}                        
-                        btnLink={`${user.menu.menuLink}/add`}
-                    />
-                    <ToolView params={user} />
-                    <TableView params={user} />            
-                </div>
-                :
-                <PageUnauthorized />
-            }</Observer>
+            menu.indexOf('view') !== -1 ?
+            <div className="ds-container">
+                <HeaderView
+                    title={user.title}
+                    btnTooltip={`Tambah ${user.title}`}
+                    btnIcon="add"
+                    intent="success"
+                    btnShow={menu.indexOf('add') !== -1}
+                    btnLink="add"
+                />
+                <ToolView params={user} />
+                <TableView params={user} access={menu} />            
+            </div>
+            :
+            <PageUnauthorized />
         )
     }
 }
+
+export default observer(UserView)

@@ -12,7 +12,7 @@ const Sidebar = observer(() => {
         <Card className="sidebar">
             <Menu>
                 {parent.map(p => (
-                    children.length > 0 
+                    children.filter(o => o.menuParentId === p.menuId).length > 0 
                     && 
                     <MenuItem key={p.menuId} text={p.menuLabel} icon={p.menuIcon}>
                         {children.map(c => (

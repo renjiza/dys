@@ -23,7 +23,7 @@ export const PageUnauthorized = () => {
     return (
         <div className="ds-container" style={{ textAlign: 'center', paddingTop: '10%' }}>
             <div style={{ fontSize: 50, fontWeight: 'bold' }}>401</div>
-            Halaman diblokir karena tidak mempunyai akses ke halaman ini
+            Halaman diblokir karena anda tidak mempunyai akses ke halaman ini
         </div>
     )
 }
