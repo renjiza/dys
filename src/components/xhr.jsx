@@ -1,7 +1,7 @@
 import global from '../stores/globalstore';
 
-export const apiUrl = 'http://localhost:1993/'
-// export const apiUrl = 'https://myapi.dys-resources.com/'
+export const apiUrl = 'http://localhost:1313/'
+// export const apiUrl = 'https://api.dys-resources.com/'
 
 export function separator(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
