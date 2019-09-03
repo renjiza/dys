@@ -17,6 +17,7 @@ const global = observable({
         client: null,
         branch: null,
         user: null,
+        fullname: null,
     },
     takeDiff(obj1, obj2) {
         let objNew = {}

@@ -9,24 +9,24 @@ import history from '../../components/history';
 import global from '../../stores/globalstore';
 
 
-export const user = observable({
-    title: "User",
+export const employment = observable({
+    title: "Jabatan",
     head: [
         {
-            label: 'Email', column: 'userEmail', action: () => {
-                if (user.query.order !== "userEmail") {
-                    user.query.order = "userEmail"
-                    user.query.orderLabel = "Email"
-                    user._getAll()
+            label: 'Kode', column: 'employmentCode', action: () => {
+                if (employment.query.order !== 'employmentCode') {
+                    employment.query.order = 'employmentCode'
+                    employment.query.orderLabel = 'Kode'
+                    employment._getAll()
                 }
             }
         },
         {
-            label: 'Nama Lengkap', column: 'userFullname', action: () => {
-                if (user.query.order !== "userFullname") {
-                    user.query.order = "userFullname"
-                    user.query.orderLabel = "Nama Lengkap"
-                    user._getAll()
+            label: 'Nama', column: 'employmentName', action: () => {
+                if (employment.query.order !== 'employmentName') {
+                    employment.query.order = 'employmentName'
+                    employment.query.orderLabel = 'Nama'
+                    employment._getAll()
                 }
             }
         },
@@ -34,100 +34,96 @@ export const user = observable({
     privilege: [
         {
             label: 'Ubah',
-            key: 'user',
+            key: 'employment',
             act: 'edit',
             icon: 'edit',
-            action: o => history.replace(`edit/${o[[user.id]]}`)
+            action: o => history.replace(`edit/${o[[employment.id]]}`)
         },
         {
             label: 'Hapus',
-            key: 'user',
+            key: 'employment',
             act: 'delete',
             icon: 'trash',
             action: o => o.isShowConfirm = true
         },
-        {
-            label: 'Atur akses user',
-            key: 'privilege',
-            act: 'edit',
-            icon: 'confirm',
-            action: o => history.replace(`/privilege/edit/${o.userId}`)
-        },
     ],
     query: {
+        column: `employmentId, 
+            employmentCode, 
+            employmentName`,
         filter: '',
-        order: 'userFullname',
-        orderLabel: 'Nama Lengkap',
+        order: 'employmentName',
+        orderLabel: 'Nama',
         sort: 'asc',
     },
     body: [],
-    id: 'userId',
-    label: 'userFullname',
+    id: 'employmentId',
+    label: 'employmentName',
     loading: false,
     inputOld: {},
     input: {},
     async _getAll() {
-        return get('user', user.query)
+        return get('employment', employment.query)
             .then(res => {
                 if (res.error === null) {
-                    user.body = res.response
+                    employment.body = res.response
                 }
             })
             .catch(toastCatch)
     },
     async _getById(id) {
-        return get(`user/${id}`, {})
+        return get(`employment/${id}`, {})
             .then(res => {
-                user.input = res.response
-                user.inputOld = res.response
+                employment.input = res.response
+                employment.inputOld = res.response
             })
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(user.input)
-        user.input.logDetail = logDetail
-        user.loading = true
-        return post('user', user.input)
+        const logDetail = JSON.stringify(employment.input)
+        employment.input.logDetail = logDetail
+        employment.loading = true
+        return post('employment', employment.input)
             .then(res => {
-                user.loading = false
+                employment.loading = false
                 if (res.error === null) {
                     toastSuccess(res.response)
-                    user.input = {}
+                    employment.input = {}
                 } else {
                     toastError(res.error)
                 }
             })
             .catch(() => {
                 toastCatch()
-                user.loading = false
+                employment.loading = false
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(user.input, user.inputOld)
-        user.input.logDetail = logDetail
-        user.loading = true
-        return put('user', user.input)
+        const logDetail = global.takeDiff(employment.input, employment.inputOld)
+        employment.input.logDetail = logDetail
+        employment.loading = true
+        return put('employment', employment.input)
             .then(res => {
-                user.loading = false
+                employment.loading = false
                 if (res.error === null) {
                     toastSuccess(res.response)
-                    user.input = {}
-                    history.replace('/user/view')
+                    employment.input = {}
+                    history.replace('/employment/view')
                 } else {
                     toastError(res.error)
                 }
             })
             .catch(() => {
                 toastCatch()
-                user.loading = false
+                employment.loading = false
             })
     },
     async _delete(id, info) {
-        return del(`user/${id}`, { info: info })
+        return del(`employment/${id}`, { info: info })
             .then(res => {
                 if (res.error === null) {
                     toastSuccess(res.response)
-                    user._getAll()
+                    employment._getAll()
                 } else {
                     toastError(res.error)
                 }
@@ -137,29 +133,29 @@ export const user = observable({
 })
 
 
-class UserView extends PureComponent {
+class EmploymentView extends PureComponent {
 
     componentDidMount() {
-        document.title = `${user.title} | ${global.appname}`
+        document.title = `${employment.title} | ${global.appname}`
     }
 
     render() {
-        const acc = global.menu.filter(o => o.menuKey === 'user' || o.menuKey === 'privilege')
-        const currentAcc = acc.filter(o => o.menuKey === 'user').map(o => o.menuAction)
+        const acc = global.menu.filter(o => o.menuKey === 'employment')
+        const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
                 <div className="dys-paper">
                     <div className="dys-container">
                         <HeaderView
-                            title={user.title}
-                            btnTooltip={`Tambah ${user.title}`}
+                            title={employment.title}
+                            btnTooltip={`Tambah ${employment.title}`}
                             btnIcon="add"
                             intent="success"
                             btnShow={currentAcc.indexOf('add') !== -1}
                             btnLink="add"
                         />
-                        <ToolView params={user} />
-                        <TableView params={user} access={acc} />
+                        <ToolView params={employment} />
+                        <TableView params={employment} access={acc} />
                     </div>
                 </div>
                 :
@@ -168,4 +164,4 @@ class UserView extends PureComponent {
     }
 }
 
-export default observer(UserView)
+export default observer(EmploymentView)

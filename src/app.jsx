@@ -4,7 +4,7 @@ import Body from './body';
 import history from './components/history';
 
 
-function App() {
+function App() {	
 	return (
 		<Router history={history}>
 			<Body />

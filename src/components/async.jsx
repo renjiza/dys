@@ -1,17 +1,20 @@
 import React, { PureComponent } from 'react';
+import { Spinner } from '@blueprintjs/core';
 
 
 const LoadingIndicator = () => {
     document.title = 'Memuat halaman ...'
     return (
-        <div className="ds-container" style={{ textAlign: 'center', paddingTop: '10%' }}>Memuat halaman ...</div>
+        <div className="dys-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)', backgroundColor: 'rgba(16,22,26,.1)' }}>
+            <Spinner intent="primary" size={70} />    
+        </div>
     )
 }
 
 const PageNotFound = () => {
     document.title = '404 - Halaman tidak ditemukan'
     return (
-        <div className="ds-container" style={{ textAlign: 'center', paddingTop: '10%' }}>
+        <div className="dys-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)' }}>
             <div style={{ fontSize: 50, fontWeight: 'bold' }}>404</div>
             Halaman tidak ditemukan
         </div>
@@ -21,7 +24,7 @@ const PageNotFound = () => {
 export const PageUnauthorized = () => {
     document.title = '401 - Halaman diblokir'
     return (
-        <div className="ds-container" style={{ textAlign: 'center', paddingTop: '10%' }}>
+        <div className="dys-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)' }}>
             <div style={{ fontSize: 50, fontWeight: 'bold' }}>401</div>
             Halaman diblokir karena anda tidak mempunyai akses ke halaman ini
         </div>
@@ -36,10 +39,14 @@ export class Async extends PureComponent {
             Module: null
         }
     }    
+    
+    componentWillReceiveProps(curr, next) {
+        console.log(curr, next)
+    }
 
     async componentWillMount() {
         const { param } = this.props
-        const { params } = param.match
+        const { params } = param.match        
         switch (true) {
             case (typeof params.module === 'undefined'):
                 await import(`../templates/main`)

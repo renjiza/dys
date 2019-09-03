@@ -2,7 +2,10 @@
 $ns: ns;
 @import '~@blueprintjs/core/lib/scss/variables.scss';
 @import "~@blueprintjs/core/src/blueprint.scss";
+@import "~@blueprintjs/datetime/src/blueprint-datetime.scss";
 @import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+@import 'custom.scss';
+
 
 @font-face {
    font-family: 'Open Sans';
@@ -12,56 +15,10 @@ $ns: ns;
    src: url('./fonts/Open Sans.ttf') format('truetype');
 }
 
-// ========================================= START restyle core blueprint ==========================================
-
-.#{$ns}-navbar {
-	position: sticky;
-	top: 0;
-	border-bottom: 1px solid $light-gray5;
-	box-shadow: 0 1px 15px $light-gray4;
-}
-
-.#{$ns}-menu-item:hover {
-	background-color: $indigo4;
-	color: $white;
-}
-.#{$ns}-menu-item:hover > .#{$ns}-icon {
-	color: $white;
-}
-
-.#{$ns}-tooltip {
-	user-select: none;
-}
-
-.#{$ns}-button:focus {
-	outline: none;
-}
-
-.#{$ns}-input {
-	box-shadow: none;
-	border: 1px solid $indigo5;
-}
-
-.#{$ns}-card {
-	box-shadow: 0 1px 15px $light-gray4;
-}
-
-table.#{$ns}-html-table th {
-	color: $gray3;
-	font-weight: normal;
-	background-color: #f4f8f9;
-	position: sticky;
-	top: 0;
-}
-
-table.#{$ns}-html-table tbody tr:first-child td {
-	box-shadow: none;
-}
-
-// ========================================= END restyle core blueprint ==========================================
 
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
  
 ::-webkit-scrollbar-track {
@@ -79,6 +36,10 @@ table.#{$ns}-html-table tbody tr:first-child td {
 a, a:hover {
 	text-decoration: none;
 	color: inherit;
+}
+
+.checkbox {
+	margin-top: 30px;	
 }
 
 body {
@@ -122,18 +83,41 @@ body {
 	margin-bottom: 1rem;
 }
 
+.heading {
+	width: auto;
+    max-width: 25vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.btnUserTopBar > .#{$ns}-button-text {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-width: 20vw;
+}
+
 .wrapTableview {	
 	overflow-y: auto;
-	height: calc(100vh - 192px);
+	height: calc(100vh - 188px);
 }
 
 .wrapTableview tbody {
 	background-color: $white;
 }
 
-.ds-container {
-	margin: 1%;
-	height: calc(100% - 30px);
+.dys-container {
+	padding: 1%;
+	height: 100%;
+}
+
+.dys-paper {
+	background-color: $white;
+	height: calc(100vh - 70px);
+    background-color: #ffffff;
+    margin: 20px 1% 0 1%;
+    border-radius: 15px 15px 0 0;
 }
 
 .sidebar {
@@ -148,16 +132,45 @@ body {
     padding: 30px;
     border-radius: 5px;
     border: 1px solid $light-gray5;
-    box-shadow: 0 1px 15px $light-gray4;
+    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.15);
 }
 
 .form {
 	overflow-y: auto;
-	height: calc(100vh - 107px);
+	height: calc(100vh - 127px);
+}
+
+.paddingVertical {
+	padding: 1rem 0;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.border {
+	border: 1px solid $light-gray3;
 }
 
 .bold {
 	font-weight: bold;
+}
+
+.pointer {
+	user-select: none;
+	cursor: pointer;
+}
+
+.datefill > span {
+	width: 100%;
+}
+
+[class*="col-"] {
+	padding: 2px 10px;
 }
 
 @import 'reflex.min.css';

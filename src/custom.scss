@@ -1,0 +1,193 @@
+@import '~@blueprintjs/core/lib/scss/variables.scss';
+
+$custom: (
+	"primary": ($indigo1,$indigo2, $indigo3, $indigo4, $indigo5),
+	"success": ($forest1, $forest2,  $forest3, $forest4, $forest5),
+	"warning": ($gold1, $gold2,  $gold3, $gold4, $gold5),
+	"danger": ($vermilion1, $vermilion2,  $vermilion3, $vermilion4, $vermilion5),
+) !default;
+
+// ========================================= START restyle core blueprint ==========================================
+
+@mixin my-button-intent($default-color, $hover-color, $active-color) {
+    &:not(.#{$ns}-minimal) {
+        background-color: $default-color;
+    }
+
+    &:hover {
+        background-color: $hover-color;
+    }
+
+    &:active,
+    &.#{$ns}-active {
+        background-color: $active-color;
+        background-image: none;
+    }
+
+    &:disabled,
+    &.#{$ns}-disabled {
+        @include my-button-intent-disabled($default-color);
+    }
+}
+
+@mixin my-button-intent-disabled($default-color) {
+    border-color: transparent;
+    box-shadow: none;
+    background-color: rgba($default-color, 0.5);
+    background-image: none;
+}
+
+@mixin my-button-minimal-intent($intent-color, $text-color, $dark-text-color) {
+    color: $text-color;
+
+    &:hover,
+    &:active,
+    &.#{$ns}-active {
+        color: $text-color;
+    }
+
+    &:hover {
+        background: rgba($intent-color, 0.15);
+        color: $text-color;
+    }
+
+    &:active,
+    &.#{$ns}-active {
+        background: rgba($intent-color, 0.3);
+        color: $text-color;
+    }
+
+    &:disabled,
+    &.#{$ns}-disabled {
+        color: rgba($text-color, 0.5);
+
+        &.#{$ns}-active {
+            background: rgba($intent-color, 0.3);
+        }
+    }
+
+    .#{$ns}-button-spinner .#{$ns}-spinner-head {
+        stroke: $text-color;
+    }
+}
+
+.#{$ns}-button.#{$ns}-minimal {
+    @each $intent, $colors in $custom {
+		&.#{$ns}-intent-#{$intent} {            
+            @include my-button-minimal-intent(
+                nth($colors, 3),
+                nth($colors, 2),
+                nth($colors, 1),
+            )            
+		}
+	}
+}
+
+.#{$ns}-button {
+	@each $intent, $colors in $custom {
+		&.#{$ns}-intent-#{$intent} {
+			@include my-button-intent(
+				nth($colors, 3),
+				nth($colors, 2),
+				nth($colors, 1),
+            )
+        }
+    }
+}
+
+.#{$ns}-navbar {
+	position: sticky;
+	top: 0;
+	border-bottom: 1px solid $light-gray5;
+	box-shadow: 0 1px 15px rgba(0, 0, 0, 0.05);
+}
+
+.#{$ns}-menu-item:hover {
+	background-color: nth(map-get($custom, "primary"), 4);
+    color: $white;
+    
+    & > .#{$ns}-icon {
+	    color: $white;
+    }
+}
+
+.#{$ns}-tooltip {
+	user-select: none;
+}
+
+.#{$ns}-button:focus {
+	outline: none;
+}
+
+.#{$ns}-input {
+	box-shadow: none;
+	border: 1px solid $indigo5;
+}
+
+.#{$ns}-card {
+	box-shadow: 0 1px 15px rgba(0, 0, 0, 0.05);
+}
+
+table.#{$ns}-html-table th {
+	color: $indigo4;
+	font-weight: normal;
+	background-color: $white;
+	position: sticky;
+	top: 0;
+}
+
+.#{$ns}-popover {
+	box-shadow: 0 1px 15px rgba(0, 0, 0, 0.15);
+}
+
+.#{$ns}-submenu.bp3-popover > .#{$ns}-popover-content {
+	box-shadow: 0 1px 15px rgba(0, 0, 0, 0.15);
+}
+
+.#{$ns}-popover .#{$ns}-popover-arrow::before {
+	box-shadow: 0 1px 15px rgba(0, 0, 0, 0.15);
+}
+
+.#{$ns}-checkbox {
+	user-select: none;
+}
+
+.#{$ns}-control.#{$ns}-checkbox input:checked~.#{$ns}-control-indicator:before {
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12 5c-.28 0-.53.11-.71.29L7 9.59l-2.29-2.3a1.003 1.003 0 00-1.42 1.42l3 3c.18.18.43.29.71.29s.53-.11.71-.29l5-5A1.003 1.003 0 0012 5z' fill='%23fff'/%3E%3C/svg%3E")
+}
+
+.myselect > .#{$ns}-popover-target {
+	width: 100%;
+}
+
+.myselect > .#{$ns}-popover-target > div > .#{$ns}-button {
+	justify-content: space-between;
+}
+
+.#{$ns}-popover .#{$ns}-popover-content {
+	position: relative;
+    border-radius: 3px;
+}
+
+.#{$ns}-select-popover .#{$ns}-popover-content {
+	padding: 5px;
+}
+
+.#{$ns}-select-popover .#{$ns}-menu:not(:first-child) {
+	padding-top: 5px;
+}
+
+.#{$ns}-select-popover .#{$ns}-menu {
+	max-width: 400px;
+    max-height: 300px;
+    overflow: auto;
+    padding: 0;
+}
+
+.#{$ns}-datepicker .DayPicker-Day.DayPicker-Day--selected {
+    background-color: nth(map-get($custom, "primary"), 3);
+
+    &:hover {
+        background-color: nth(map-get($custom, "primary"), 2);
+    }
+}

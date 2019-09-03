@@ -1,7 +1,14 @@
 import global from '../stores/globalstore';
+import io from 'socket.io-client';
 
-export const apiUrl = 'http://localhost:1313/'
-// export const apiUrl = 'https://api.dys-resources.com/'
+// export const apiUrl = 'http://myapi.dys-resources.com'
+export const apiUrl = 'http://localhost:13131'
+
+export const socket = io(apiUrl);
+ 
+export const emit = (event, args) => {
+    return socket.emit(event, { ...args, ...global.cookie })
+}
 
 export function separator(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -9,7 +16,7 @@ export function separator(x) {
 
 export const get = async (requestUrl, params) => {
     const parameter = { ...params, ...global.cookie }
-    const base = requestUrl.indexOf('http') !== -1 ? "" : apiUrl
+    const base = requestUrl.indexOf('http') !== -1 ? "" : apiUrl + "/"
     const esc = encodeURIComponent
     const queryParams = "?" + Object.keys(parameter).map(k => esc(k) + '=' + esc(parameter[k])).join('&')
     return await fetch(base + requestUrl + queryParams, {
@@ -26,7 +33,7 @@ export const get = async (requestUrl, params) => {
 
 export const post = async (requestUrl, params) => {
     const parameter = { ...params, ...global.cookie }
-    const base = requestUrl.indexOf('http') !== -1 ? "" : apiUrl
+    const base = requestUrl.indexOf('http') !== -1 ? "" : apiUrl + "/"
     return await fetch(base + requestUrl, {
         method: 'POST',
         headers: {
@@ -39,7 +46,7 @@ export const post = async (requestUrl, params) => {
 
 export const put = async (requestUrl, params) => {
     const parameter = { ...params, ...global.cookie }
-    const base = requestUrl.indexOf('http') !== -1 ? "" : apiUrl
+    const base = requestUrl.indexOf('http') !== -1 ? "" : apiUrl + "/"
     return await fetch(base + requestUrl, {
         method: 'PUT',
         headers: {
@@ -52,7 +59,7 @@ export const put = async (requestUrl, params) => {
 
 export const del = async (requestUrl, params) => {
     const parameter = { ...params, ...global.cookie }
-    const base = requestUrl.indexOf('http') !== -1 ? "" : apiUrl
+    const base = requestUrl.indexOf('http') !== -1 ? "" : apiUrl + "/"
     const esc = encodeURIComponent
     const queryParams = "?" + Object.keys(parameter).map(k => esc(k) + '=' + esc(parameter[k])).join('&')
     return await fetch(base + requestUrl + queryParams, {

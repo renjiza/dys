@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 
 
 const Header = observer(() => (
-    <Tooltip content="Kembali ke halaman awal" position="bottom" usePortal={false}>
+    <Tooltip content="Kembali ke halaman awal" position="bottom-right" usePortal={false}>
         <Link to="/">
-            <NavbarHeading className="bold" style={{ color: Colors.INDIGO3 }}>{global.control.branchname}</NavbarHeading>
+            <NavbarHeading className="bold heading" style={{ color: Colors.INDIGO3 }}>{global.control.branchname}</NavbarHeading>
         </Link>
     </Tooltip>
 ))
@@ -31,7 +31,7 @@ const UserContext = () => {
 const UserButton = () => (
     <Popover content={<UserContext />} position="bottom-right" usePortal={false}>
         <Observer>{() =>
-            <Button minimal intent="primary" icon="user" text={global.control.email} />
+            <Button minimal intent="primary" icon="user" text={global.control.email} className="btnUserTopBar" />
         }</Observer>
     </Popover>
 )

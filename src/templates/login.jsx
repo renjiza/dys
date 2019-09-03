@@ -5,13 +5,14 @@ import { Observer, useObserver } from 'mobx-react-lite';
 import Cookies from 'js-cookie';
 
 
-import { get, put, post } from '../components/xhr';
+import { get, put, post, emit, socket } from '../components/xhr';
 import { publicPath } from '../components/router';
 import history from '../components/history';
 import global from '../stores/globalstore';
+import { toast } from '../components/myparts';
 
 const containerStyle = {
-    height: '95%',
+    height: '90%',
     fontSize: 16,
     display: 'flex',
     flexFlow: 'row wrap',
@@ -20,20 +21,40 @@ const containerStyle = {
 }
 
 export const login = observable({
+    isLoading: false,
     isShowPassword: false,
     input: {
         email: 'renji.izaki@gmail.com',
         password: '123'
     },
     async _login() {
+        login.isLoading = true
         post('in', this.input).then(res => {
+            login.isLoading = false
             if (res.error === null) {
-                Cookies.set('__ds_cookie_control', res.response.token)
+                socket.on('connected', msg => {
+                    console.log('[connected]', msg)
+                })
+                socket.on('privilege updated', msg => {
+                    if (global.cookie.user !== msg.itId) {
+                        toast.show({ message: msg.message, intent: 'warning', icon: 'automatic-updates' })
+                    }
+                    login._getMenuByToken()
+                })
+                socket.on('user updated', msg => {
+                    if (global.cookie.user !== msg.itId) {
+                        toast.show({ message: msg.message, intent: 'warning', icon: 'automatic-updates' })
+                    }
+                    login._checkSession()
+                })
+                emit('connected', res.response)
+                Cookies.set('__dys_cookie_control', res.response.token)
                 global.control = res.response
                 global.cookie = {
                     client: res.response.clientId,
                     branch: res.response.branchId,
                     user: res.response.userId,
+                    fullname: res.response.fullname,
                 }
                 this._getMenuByToken()
                 history.replace('/')
@@ -43,16 +64,18 @@ export const login = observable({
                 });
                 toast.show({ message: res.error, intent: 'warning', icon: 'warning-sign' })
             }
-        }, (err) => {
+        }).catch((err) => {
+            login.isLoading = false
             const toast = Toaster.create({
                 position: 'top',
             })
             toast.show({ message: 'tidak dapat terhubung ke server', intent: 'danger', icon: 'ban-circle' })
         })
-    },    
+    },
     async _logout() {
-        return put('out', { token: Cookies.get('__ds_cookie_control') }).then(res => {
+        return put('out', { token: Cookies.get('__dys_cookie_control') }).then(res => {
             if (res.status === 200) {
+                socket.removeAllListeners()
                 global.control = {
                     userid: null,
                     email: null,
@@ -66,22 +89,43 @@ export const login = observable({
                     client: null,
                     branch: null,
                     user: null,
+                    fullname: null,
                 }
-                Cookies.remove('__ds_cookie_control')
+                Cookies.remove('__dys_cookie_control')
                 history.replace('/login')
             }
         })
     },
     async _checkSession() {
-        return get('checkSession', { token: Cookies.get('__ds_cookie_control') }).then(res => {
+        return get('checkSession', { token: Cookies.get('__dys_cookie_control') }).then(res => {
             if (res.response !== null) {
+                socket.on('connected', msg => {
+                    console.log('[connected]', msg)
+                })
+                socket.on('privilege updated', msg => {
+                    if (global.cookie.user !== msg.itId) {
+                        toast.show({ message: msg.message, intent: 'warning', icon: 'automatic-updates' })
+                    }
+                    login._getMenuByToken()
+                })
+                socket.on('user updated', msg => {
+                    if (global.cookie.user !== msg.itId) {
+                        toast.show({ message: msg.message, intent: 'warning', icon: 'automatic-updates' })
+                    }
+                    login._checkSession()
+                })
+                emit('connected', res.response)
                 global.control = res.response
                 global.cookie = {
                     client: res.response.clientId,
                     branch: res.response.branchId,
                     user: res.response.userId,
+                    fullname: res.response.fullname,
                 }
                 this._getMenuByToken()
+            } else {
+                Cookies.remove('__dys_cookie_control')
+                setTimeout(() => history.replace('/login'), 100)
             }
             if (publicPath.indexOf(history.location.pathname) !== -1) {
                 history.replace('/')
@@ -89,7 +133,7 @@ export const login = observable({
         })
     },
     async _getMenuByToken() {
-        return get(`getMenuByToken`, { token: Cookies.get('__ds_cookie_control') }).then(res => {
+        return get(`getMenuByToken`, { token: Cookies.get('__dys_cookie_control') }).then(res => {
             if (res.error === null && res.response !== null) {
                 global.menu = res.response
             }
@@ -146,7 +190,9 @@ const Login = () => (
             <EmailInput />
             <PasswordInput />
             <br />
-            <Button onClick={() => login._login()} large fill icon="log-in" text="Masuk" intent={Intent.PRIMARY} />
+            <Observer>{() =>
+                <Button onClick={() => login._login()} loading={login.isLoading} large fill icon="log-in" text="Masuk" intent={Intent.PRIMARY} />
+            }</Observer>
         </div>
     </div>
 )

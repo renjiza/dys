@@ -4,30 +4,26 @@ import { Observer, observer } from 'mobx-react';
 
 import { HeaderView } from '../../components/myparts';
 import { PageUnauthorized } from '../../components/async';
-import { user } from './userview';
+import { producttype } from './producttypeview';
 import history from '../../components/history';
 import global from '../../stores/globalstore';
 
 
-class UserInput extends PureComponent {
+class ProductTypeInput extends PureComponent {
 
     componentDidMount() {
         const path = history.location.pathname.split('/')
         if (path[2] === "add") {
-            document.title = `Tambah ${user.title} | ${global.appname}`
-            user.input = {
-                userFullname: '',
-                userEmail: '',
-                userPassword: '',
-            }
+            document.title = `Tambah ${producttype.title} | ${global.appname}`
+            producttype.input = {}
         } else {
-            document.title = `Ubah ${user.title} | ${global.appname}`
-            user._getById(path[3])
+            document.title = `Ubah ${producttype.title} | ${global.appname}`
+            producttype._getById(path[3])
         }
     }
 
     render() {
-        const menu = global.menu.filter(o => o.menuKey === 'user').map(o => o.menuAction)
+        const menu = global.menu.filter(o => o.menuKey === 'producttype').map(o => o.menuAction)
         const path = history.location.pathname.split('/')
         const isAdd = path[2] === "add"
 
@@ -37,8 +33,8 @@ class UserInput extends PureComponent {
                 <div className="dys-paper">
                     <div className="dys-container">
                         <HeaderView
-                            title={`${isAdd ? "Tambah" : "Ubah"} ${user.title}`}
-                            btnTooltip={`Kembali ke list data ${user.title}`}
+                            title={`${isAdd ? "Tambah" : "Ubah"} ${producttype.title}`}
+                            btnTooltip={`Kembali ke list data ${producttype.title}`}
                             btnIcon="delete"
                             color={Colors.RED3}
                             intent="danger"
@@ -48,61 +44,43 @@ class UserInput extends PureComponent {
 
                         <form className="form">
                             <div className="grid">
-                                <div className="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                                <div className="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                                     <FormGroup
-                                        label="Nama Lengkap"
+                                        label="Kode"
                                         labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
                                     >
                                         <Observer>{() =>
                                             <InputGroup
-                                                value={user.input.userFullname || ''}
-                                                onChange={e => user.input.userFullname = e.target.value}
+                                                value={producttype.input.producttypeCode || ''}
+                                                onChange={e => producttype.input.producttypeCode = e.target.value}
+                                            />
+                                        }</Observer>
+                                    </FormGroup>
+                                </div>
+                                <div className="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                                    <FormGroup
+                                        label="Nama"
+                                        labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
+                                    >
+                                        <Observer>{() =>
+                                            <InputGroup
+                                                value={producttype.input.producttypeName || ''}
+                                                onChange={e => producttype.input.producttypeName = e.target.value}
                                             />
                                         }</Observer>
                                     </FormGroup>
                                 </div>
                             </div>
-                            {path[2] === "add" && <div className="grid">
-                                <div className="col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                                    <FormGroup
-                                        label="Email"
-                                        helperText="Email ini dipakai untuk login"
-                                        labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
-                                    >
-                                        <Observer>{() =>
-                                            <InputGroup
-                                                value={user.input.userEmail || ''}
-                                                onChange={e => user.input.userEmail = e.target.value}
-                                            />
-                                        }</Observer>
-                                    </FormGroup>
-                                </div>
-                                <div className="col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                                    <FormGroup
-                                        label="Password"
-                                        helperText="Password ini dipakai untuk login"
-                                        labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
-                                    >
-                                        <Observer>{() =>
-                                            <InputGroup
-                                                type="password"
-                                                value={user.input.userPassword || ''}
-                                                onChange={e => user.input.userPassword = e.target.value}
-                                            />
-                                        }</Observer>
-                                    </FormGroup>
-                                </div>
-                            </div>}
                             <div className="grid">
                                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <Observer>{() =>
                                         <Button
-                                            loading={user.loading}
-                                            disabled={user.input.userFullname === "" || user.input.userEmail === ""}
+                                            loading={producttype.loading}
+                                            disabled={producttype.input.producttypeFullname === "" || producttype.input.producttypeEmail === ""}
                                             icon="floppy-disk"
                                             intent={isAdd ? "success" : "warning"}
                                             text={isAdd ? "Tambah" : "Perbarui"}
-                                            onClick={() => isAdd ? user._create() : user._update()}
+                                            onClick={() => isAdd ? producttype._create() : producttype._update()}
                                         />
                                     }</Observer>
                                 </div>
@@ -116,4 +94,4 @@ class UserInput extends PureComponent {
     }
 }
 
-export default observer(UserInput)
+export default observer(ProductTypeInput)
