@@ -12,6 +12,7 @@ const global = observable({
         clientname: null,
         branchId: null,
         branchname: null,
+        super: null,
     },
     cookie: {
         client: null,

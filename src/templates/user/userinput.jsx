@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Colors, Button, FormGroup, InputGroup } from '@blueprintjs/core';
+import { Colors, Button, FormGroup, InputGroup, Checkbox, Tooltip } from '@blueprintjs/core';
 import { Observer, observer } from 'mobx-react';
 
 import { HeaderView } from '../../components/myparts';
@@ -50,7 +50,7 @@ class UserInput extends PureComponent {
                             <div className="grid">
                                 <div className="col-lg-5 col-md-5 col-sm-6 col-xs-12">
                                     <FormGroup
-                                        label="Nama Lengkap"
+                                        label="Nama lengkap"
                                         labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
                                     >
                                         <Observer>{() =>
@@ -60,6 +60,18 @@ class UserInput extends PureComponent {
                                             />
                                         }</Observer>
                                     </FormGroup>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-4 col-xs-12">                                    
+                                    <Tooltip content="User super akan diberikan akses ke menu konfigurasi perusahaan.">
+                                        <Observer>{() =>
+                                            <Checkbox
+                                                checked={user.input.userSuper === 1 || 0}
+                                                onChange={() => user.input.userSuper = user.input.userSuper === 0 ? 1 : 0}
+                                                label="User super"
+                                                className="checkbox"
+                                            />
+                                        }</Observer>
+                                    </Tooltip>
                                 </div>
                             </div>
                             {path[2] === "add" && <div className="grid">

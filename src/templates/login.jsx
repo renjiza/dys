@@ -102,27 +102,14 @@ export const login = observable({
                 socket.on('connected', msg => {
                     console.log('[connected]', msg)
                 })
-                socket.on('privilege updated', msg => {
-                    if (global.cookie.user !== msg.itId) {
-                        toast.show({ message: msg.message, intent: 'warning', icon: 'automatic-updates' })
-                    }
-                    login._getMenuByToken()
-                })
-                socket.on('user updated', msg => {
-                    if (global.cookie.user !== msg.itId) {
-                        toast.show({ message: msg.message, intent: 'warning', icon: 'automatic-updates' })
-                    }
-                    login._checkSession()
-                })
-                emit('connected', res.response)
+                emit('connected', res.response)                              
                 global.control = res.response
                 global.cookie = {
                     client: res.response.clientId,
                     branch: res.response.branchId,
                     user: res.response.userId,
                     fullname: res.response.fullname,
-                }
-                this._getMenuByToken()
+                }                
             } else {
                 Cookies.remove('__dys_cookie_control')
                 setTimeout(() => history.replace('/login'), 100)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Menu, MenuItem } from '@blueprintjs/core';
+import { Card, Menu, MenuItem, PopoverInteractionKind } from '@blueprintjs/core';
 import { observer } from 'mobx-react';
 
 import global from '../stores/globalstore';
@@ -14,8 +14,11 @@ const Sidebar = observer(() => {
                 {parent.map(p => (
                     children.filter(o => o.menuParentId === p.menuId).length > 0 
                     && 
-                    <MenuItem key={p.menuId} text={p.menuLabel} icon={p.menuIcon}>
-                        {children.map(c => (
+                    <MenuItem key={p.menuId} text={p.menuLabel} icon={p.menuIcon} popoverProps={{
+                        hoverCloseDelay: 300,
+                        captureDismiss: true,
+                    }}>
+                        {children.filter(o => o.menuParentId === p.menuId).map(c => (
                             <MenuItem key={c.menuId} onClick={() => history.replace(`${c.menuLink}/view`)} text={c.menuLabel} icon={c.menuIcon} />
                         ))}
                     </MenuItem>                

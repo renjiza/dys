@@ -54,7 +54,7 @@ export class Async extends PureComponent {
                     .catch((e) => { console.log(e); this.setState({ Module: PageNotFound }) })
             break;      
             case (typeof params.type === 'undefined'):
-                await import(`../${params.module}/${params.module}`)
+                await import(`../templates/${params.module}/${params.module}`)
                     .then(Module => this.setState({ Module: Module.default }))
                     .catch((e) => { console.log(e); this.setState({ Module: PageNotFound }) })
             break;

@@ -10,7 +10,9 @@ import { Link } from 'react-router-dom';
 const Header = observer(() => (
     <Tooltip content="Kembali ke halaman awal" position="bottom-right" usePortal={false}>
         <Link to="/">
-            <NavbarHeading className="bold heading" style={{ color: Colors.INDIGO3 }}>{global.control.branchname}</NavbarHeading>
+            <NavbarHeading className="bold heading" style={{ color: Colors.INDIGO3 }}>
+                <Observer>{() => global.control.clientname}</Observer>
+            </NavbarHeading>
         </Link>
     </Tooltip>
 ))
@@ -49,6 +51,17 @@ export default class Topbar extends PureComponent {
                     <Button minimal intent="primary" onClick={this.toggleShowMenu}>
                         <Icon icon="menu" />
                     </Button>
+                    <Observer>{() => 
+                        global.control.super === 1 &&
+                        <>
+                        <NavbarDivider />
+                        <Tooltip content="Konfigurasi Perusahaan">
+                            <Link to="/config">
+                                <Button minimal intent="primary" icon="office" />
+                            </Link>
+                        </Tooltip>
+                        </>
+                    }</Observer>                    
                     <NavbarDivider />
                     <Header />
                 </NavbarGroup>

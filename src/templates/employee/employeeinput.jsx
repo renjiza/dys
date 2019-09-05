@@ -185,7 +185,7 @@ class EmployeeInput extends PureComponent {
                             <div className="grid">
                                 <div className="col-lg-8 col-md-8 col-sm-10 col-xs-12">
                                     <FormGroup
-                                        label="Alamat Lengkap"
+                                        label="Alamat lengkap"
                                         labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
                                     >
                                         <Observer>{() =>                                            
@@ -217,7 +217,7 @@ class EmployeeInput extends PureComponent {
                                 </div>
                                 <div className="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                                     <FormGroup
-                                        label="No. Identitas"
+                                        label="No. identitas"
                                         labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
                                     >
                                         <Observer>{() =>
@@ -245,7 +245,7 @@ class EmployeeInput extends PureComponent {
                             <div className="grid">
                                 <div className="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                                     <FormGroup
-                                        label="Masuk Kerja"
+                                        label="Masuk kerja"
                                         labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
                                     >
                                         <Observer>{() =>
