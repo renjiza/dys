@@ -1,8 +1,14 @@
 @import '~@blueprintjs/core/lib/scss/variables.scss';
 
+$myblue1: #1954ac;
+$myblue2: #1c61c9;
+$myblue3: #1e71eb;
+$myblue4: #1e88eb;
+$myblue5: #1e99eb;
+
 $custom: (
-	"primary": ($indigo1,$indigo2, $indigo3, $indigo4, $indigo5),
-	"success": ($forest1, $forest2,  $forest3, $forest4, $forest5),
+	"primary": ($forest1, $forest2,  $forest3, $forest4, $forest5),
+	"success": ($myblue1,$myblue2, $myblue3, $myblue4, $myblue5),
 	"warning": ($gold1, $gold2,  $gold3, $gold4, $gold5),
 	"danger": ($vermilion1, $vermilion2,  $vermilion3, $vermilion4, $vermilion5),
 ) !default;
@@ -10,11 +16,13 @@ $custom: (
 // ========================================= START restyle core blueprint ==========================================
 
 @mixin my-button-intent($default-color, $hover-color, $active-color) {
+    box-shadow: none;
     &:not(.#{$ns}-minimal) {
         background-color: $default-color;
     }
 
     &:hover {
+        box-shadow: none;
         background-color: $hover-color;
     }
 
@@ -96,10 +104,38 @@ $custom: (
 }
 
 .#{$ns}-navbar {
+    color: $white;
 	position: sticky;
 	top: 0;
-	border-bottom: 1px solid $light-gray5;
-	box-shadow: 0 1px 15px rgba(0, 0, 0, 0.05);
+	border-bottom: 1px solid nth(map-get($custom, "primary"), 3);
+    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.2);
+    
+    & .#{$ns}-navbar-divider {
+        border-left: 1px solid $gray5;
+    }
+
+    & .#{$ns}-button {
+        
+        & .#{$ns}-icon {
+            color: $white;
+        }
+
+        & .#{$ns}-minimal {
+            color: $white;
+        }
+    }
+}
+
+.#{$ns}-icon {
+    &.#{$ns}-intent-primary {
+        color: nth(map-get($custom, "primary"), 3);
+    }
+}
+
+.#{$ns}-menu-item:hover {
+    & .#{$ns}-menu-item-label {
+        color: $white;
+    }
 }
 
 .#{$ns}-menu-item:hover {
@@ -115,8 +151,32 @@ $custom: (
 	user-select: none;
 }
 
+.#{$ns}-control.#{$ns}-switch {
+
+    &:hover {
+        & input:checked ~ .#{$ns}-control-indicator {
+            background: nth(map-get($custom, "primary"), 3);
+        }
+    }
+
+    & input:checked ~ .#{$ns}-control-indicator {
+        background: nth(map-get($custom, "primary"), 3);
+    }
+}
+
 .#{$ns}-button:focus {
 	outline: none;
+}
+
+.#{$ns}-spinner {
+
+    &.#{$ns}-intent-primary {
+
+        & .#{$ns}-spinner-head {
+            stroke: nth(map-get($custom, "primary"), 3);
+        }
+    }
+
 }
 
 @function my-input-transition-shadow($color: nth(map-get($custom, "primary"), 3), $focus: false) {
@@ -131,14 +191,47 @@ $custom: (
     }
 }
 
+.myselectitem {
+    & .#{$ns}-button {
+        background-color: transparent;
+        box-shadow: none;    
+        border-bottom: 1px solid $gray4;
+        border-radius: 0;
 
+        &:hover {
+            box-shadow: none;    
+            background-color: transparent;
+            border-bottom: 1px solid $gray4;            
+            border-radius: 0;
+            font-weight: bolder;
+        }
+
+        &:focus {
+            box-shadow: 0 1px 0 0px nth(map-get($custom, "primary"), 3), 0 3px 0px 0px rgba(30, 235, 55, 0.3), inset 0 -1px 1px rgba(16, 22, 26, 0);
+            background-color: transparent;
+            border-bottom: 1px solid $gray4;            
+            border-radius: 0;
+            font-weight: bolder;
+        }
+    }
+}
 
 .#{$ns}-input {
+    background-color: transparent;
 	box-shadow: none;
-    border: 1px solid nth(map-get($custom, "primary"), 5);
+    border-bottom: 1px solid $gray4;   
+    border-radius: 0;
     
     &:focus {
-        box-shadow: my-input-transition-shadow(nth(map-get($custom, "primary"), 3), true), inset 0 1px 1px rgba($black, 0.2);
+        // box-shadow: my-input-transition-shadow(nth(map-get($custom, "primary"), 3), true), inset 0 1px 1px rgba($black, 0.2);        
+        box-shadow: 0 1px 0 0px nth(map-get($custom, "primary"), 3), 0 3px 0px 0px rgba(30, 235, 55, 0.3), inset 0 -1px 1px rgba(16, 22, 26, 0);
+        background-color: transparent;
+        border-radius: 0 !important;
+        font-weight: bolder;
+    }
+
+    &:disabled {
+        background-color: transparent;
     }
 }
 
@@ -147,7 +240,7 @@ $custom: (
 }
 
 table.#{$ns}-html-table th {
-	color: $indigo4;
+	color: nth(map-get($custom, "primary"), 4);
 	font-weight: normal;
 	background-color: $white;
 	position: sticky;
@@ -168,6 +261,160 @@ table.#{$ns}-html-table th {
 
 .#{$ns}-checkbox {
 	user-select: none;
+}
+
+.#{$ns}-form-group .#{$ns}-label {
+    margin-left: 10px;
+}
+
+.print {
+    font-size: 12px !important;
+
+    .watermark {
+        position: relative;
+        top: 150px;
+        width: 55%;
+        transform: rotate(-20deg);
+        text-align: center;   
+        
+        & > span {
+            position: fixed;
+            font-size: 60px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.08);
+        }
+    }
+
+    & .#{$ns}-label {
+        margin-bottom: 0;
+    }
+
+    .print-heading {
+        border-collapse: collapse;
+        width: 100%;  
+        box-shadow: none;  
+        
+        & td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            box-shadow: none !important;
+        }
+    }
+    
+    .print-total {
+        border-collapse: collapse;
+        width: 100%;
+
+        & td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            border-top: 1px solid $black !important;
+            border-bottom: 1px solid $black !important;
+            box-shadow: none !important;
+        }
+    }	
+    
+    .print-detail {
+        border-collapse: collapse;
+        width: 100%;
+        
+        & td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            color: $black;
+            border: 1px solid $black !important;
+            box-shadow: none !important;            
+            
+            &.inline {
+                white-space: nowrap;
+            }
+        }
+    }
+
+    & .print-off {
+        color: $gray3;
+    }
+}
+
+@media print {
+    * {
+        font-size: 12px !important;
+        box-shadow: none !important;
+        background: unset !important;
+    }
+
+	body {
+		background-color: unset;
+	}
+
+    .print-off {
+		display: none !important;
+		width: 0px !important;
+		height: 0px !important;
+	}
+	
+	.wrapSidebar  {
+		width: 0px !important;
+	}	
+	
+	.clover-paper-transparent {
+		padding: 0 !important;
+		margin: 0 !important;
+		
+		& .clover-container {
+			padding: 0 !important;
+			margin: 0 !important;
+		}
+		
+		& .form {
+			box-shadow: none;
+			padding: 0px !important;		
+			margin: 0 !important;
+		}
+        
+    }
+
+    .print-heading {
+        border-collapse: collapse;
+        width: 100%;  
+        box-shadow: none;  
+        
+        & td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            box-shadow: none !important;
+        }
+    }
+    
+    .print-total {
+        border-collapse: collapse;
+        width: 100%;
+
+        & td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            border-top: 1px solid $black !important;
+            border-bottom: 1px solid $black !important;
+            box-shadow: none !important;
+        }
+    }	
+    
+    .print-detail {
+        border-collapse: collapse;
+        width: 100%;
+        
+        & td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            color: $black;
+            border: 1px solid $black !important;
+            box-shadow: none !important;            
+            
+            &.inline {
+                white-space: nowrap;
+            }
+        }
+    }
 }
 
 .#{$ns}-control.#{$ns}-checkbox input:checked~.#{$ns}-control-indicator {
@@ -201,7 +448,7 @@ table.#{$ns}-html-table th {
 }
 
 .#{$ns}-select-popover .#{$ns}-menu {
-	max-width: 400px;
+	// max-width: 400px;
     max-height: 300px;
     overflow: auto;
     padding: 0;
@@ -213,4 +460,69 @@ table.#{$ns}-html-table th {
     &:hover {
         background-color: nth(map-get($custom, "primary"), 2);
     }
+}
+
+.#{$ns}-toast {
+    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0), 0 2px 4px rgba(16, 22, 26, 0.2), 0 8px 24px rgba(16, 22, 26, 0.2);
+
+    &.#{$ns}-intent-primary {
+        background-color: nth(map-get($custom, "primary"), 3);
+    }
+
+    &.#{$ns}-intent-success {
+        background-color: nth(map-get($custom, "success"), 3);
+    }
+
+    &.#{$ns}-intent-warning {
+        background-color: nth(map-get($custom, "warning"), 4);
+    }
+
+    &.#{$ns}-intent-danger {
+        background-color: nth(map-get($custom, "danger"), 3);
+    }
+
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: nth(map-get($custom, "primary"), 5);
+}
+
+.primary1 {
+	color: nth(map-get($custom, "primary"), 1);
+}
+
+.primary2 {
+	color: nth(map-get($custom, "primary"), 2);
+}
+
+.primary3 {
+	color: nth(map-get($custom, "primary"), 3);
+}
+
+.primary4 {
+	color: nth(map-get($custom, "primary"), 4);
+}
+
+.primary5 {
+	color: nth(map-get($custom, "primary"), 5);
+}
+
+.bprimary1 {
+	background-color: nth(map-get($custom, "primary"), 1);
+}
+
+.bprimary2 {
+	background-color: nth(map-get($custom, "primary"), 2);
+}
+
+.bprimary3 {
+	background-color: nth(map-get($custom, "primary"), 3);
+}
+
+.bprimary4 {
+	background-color: nth(map-get($custom, "primary"), 4);
+}
+
+.bprimary5 {
+	background-color: nth(map-get($custom, "primary"), 5);
 }

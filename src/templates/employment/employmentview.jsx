@@ -80,8 +80,7 @@ export const employment = observable({
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(employment.input)
-        employment.input.logDetail = logDetail
+        employment.input.logDetail = JSON.stringify(employment.input)
         employment.loading = true
         return post('employment', employment.input)
             .then(res => {
@@ -99,8 +98,7 @@ export const employment = observable({
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(employment.input, employment.inputOld)
-        employment.input.logDetail = logDetail
+        employment.input.logDetail = JSON.stringify(global.getDifference(employment.input, employment.inputOld))
         employment.loading = true
         return put('employment', employment.input)
             .then(res => {
@@ -144,8 +142,8 @@ class EmploymentView extends PureComponent {
         const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={employment.title}
                             btnTooltip={`Tambah ${employment.title}`}

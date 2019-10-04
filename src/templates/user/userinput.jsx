@@ -15,11 +15,7 @@ class UserInput extends PureComponent {
         const path = history.location.pathname.split('/')
         if (path[2] === "add") {
             document.title = `Tambah ${user.title} | ${global.appname}`
-            user.input = {
-                userFullname: '',
-                userEmail: '',
-                userPassword: '',
-            }
+            user.input = {}
         } else {
             document.title = `Ubah ${user.title} | ${global.appname}`
             user._getById(path[3])
@@ -34,11 +30,11 @@ class UserInput extends PureComponent {
 
         return (
             menu.indexOf(path[2]) !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={`${isAdd ? "Tambah" : "Ubah"} ${user.title}`}
-                            btnTooltip={`Kembali ke list data ${user.title}`}
+                            btnTooltip={`Kembali ke ${user.title}`}
                             btnIcon="delete"
                             color={Colors.RED3}
                             intent="danger"
@@ -47,6 +43,39 @@ class UserInput extends PureComponent {
                         />
 
                         <form className="form">
+                            <div className="grid">
+                                <div className="col-lg-4 col-md-4 col-sm-5 col-xs-12">
+                                    <FormGroup
+                                        label="Email"
+                                        helperText="Email ini dipakai untuk login"
+                                        labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
+                                    >
+                                        <Observer>{() =>
+                                            <InputGroup
+                                                value={user.input.userEmail || ''}
+                                                onChange={e => user.input.userEmail = e.target.value}
+                                                disabled={!isAdd}
+                                            />
+                                        }</Observer>
+                                    </FormGroup>
+                                </div>
+                                <div className="col-lg-4 col-md-4 col-sm-5 col-xs-12">
+                                    <FormGroup
+                                        label="Password"
+                                        helperText="Password ini dipakai untuk login"
+                                        labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
+                                    >
+                                        <Observer>{() =>
+                                            <InputGroup
+                                                type="password"
+                                                value={user.input.userPassword || ''}
+                                                onChange={e => user.input.userPassword = e.target.value}
+                                                disabled={!isAdd}
+                                            />
+                                        }</Observer>
+                                    </FormGroup>
+                                </div>
+                            </div>
                             <div className="grid">
                                 <div className="col-lg-5 col-md-5 col-sm-6 col-xs-12">
                                     <FormGroup
@@ -73,44 +102,17 @@ class UserInput extends PureComponent {
                                         }</Observer>
                                     </Tooltip>
                                 </div>
-                            </div>
-                            {path[2] === "add" && <div className="grid">
-                                <div className="col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                                    <FormGroup
-                                        label="Email"
-                                        helperText="Email ini dipakai untuk login"
-                                        labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
-                                    >
-                                        <Observer>{() =>
-                                            <InputGroup
-                                                value={user.input.userEmail || ''}
-                                                onChange={e => user.input.userEmail = e.target.value}
-                                            />
-                                        }</Observer>
-                                    </FormGroup>
-                                </div>
-                                <div className="col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                                    <FormGroup
-                                        label="Password"
-                                        helperText="Password ini dipakai untuk login"
-                                        labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
-                                    >
-                                        <Observer>{() =>
-                                            <InputGroup
-                                                type="password"
-                                                value={user.input.userPassword || ''}
-                                                onChange={e => user.input.userPassword = e.target.value}
-                                            />
-                                        }</Observer>
-                                    </FormGroup>
-                                </div>
-                            </div>}
+                            </div>                            
                             <div className="grid">
                                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <Observer>{() =>
                                         <Button
                                             loading={user.loading}
-                                            disabled={user.input.userFullname === "" || user.input.userEmail === ""}
+                                            disabled={
+                                                !user.input.userFullname || user.input.userFullname === "" || 
+                                                !user.input.userEmail || user.input.userEmail === "" ||
+                                                !user.input.userPassword || user.input.userPassword === ""
+                                            }
                                             icon="floppy-disk"
                                             intent={isAdd ? "success" : "warning"}
                                             text={isAdd ? "Tambah" : "Perbarui"}

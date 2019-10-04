@@ -103,15 +103,14 @@ export const employee = observable({
         return get(`employee/${id}`, {})
             .then(res => {
                 res.response.employeeBirthDate = new Date(res.response.employeeBirthDate)
-                res.response.employeeInDate = new Date(res.response.employeeInDate)
+                res.response.employeeInDate = res.response.employeeInDate ? new Date(res.response.employeeInDate) : null
                 employee.input = res.response
                 employee.inputOld = res.response
             })
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(employee.input)
-        employee.input.logDetail = logDetail
+        employee.input.logDetail = JSON.stringify(employee.input)
         employee.loading = true
         return post('employee', employee.input)
             .then(res => {
@@ -129,8 +128,7 @@ export const employee = observable({
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(employee.input, employee.inputOld)
-        employee.input.logDetail = logDetail
+        employee.input.logDetail = JSON.stringify(global.getDifference(employee.input, employee.inputOld))
         employee.loading = true
         return put('employee', employee.input)
             .then(res => {
@@ -196,8 +194,8 @@ class EmployeeView extends PureComponent {
         const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={employee.title}
                             btnTooltip={`Tambah ${employee.title}`}

@@ -30,11 +30,11 @@ class WarehouseInput extends PureComponent {
 
         return (
             menu.indexOf(path[2]) !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={`${isAdd ? "Tambah" : "Ubah"} ${warehouse.title}`}
-                            btnTooltip={`Kembali ke list data ${warehouse.title}`}
+                            btnTooltip={`Kembali ke ${warehouse.title}`}
                             btnIcon="delete"
                             color={Colors.RED3}
                             intent="danger"

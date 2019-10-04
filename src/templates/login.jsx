@@ -9,7 +9,7 @@ import { get, put, post, emit, socket } from '../components/xhr';
 import { publicPath } from '../components/router';
 import history from '../components/history';
 import global from '../stores/globalstore';
-import { toast } from '../components/myparts';
+
 
 const containerStyle = {
     height: '90%',
@@ -31,34 +31,24 @@ export const login = observable({
         login.isLoading = true
         post('in', this.input).then(res => {
             login.isLoading = false
-            if (res.error === null) {
-                socket.on('connected', msg => {
-                    console.log('[connected]', msg)
-                })
-                socket.on('privilege updated', msg => {
-                    if (global.cookie.user !== msg.itId) {
-                        toast.show({ message: msg.message, intent: 'warning', icon: 'automatic-updates' })
-                    }
-                    login._getMenuByToken()
-                })
-                socket.on('user updated', msg => {
-                    if (global.cookie.user !== msg.itId) {
-                        toast.show({ message: msg.message, intent: 'warning', icon: 'automatic-updates' })
-                    }
-                    login._checkSession()
-                })
-                emit('connected', res.response)
+            if (res.error === null) {                                                
                 Cookies.set('__dys_cookie_control', res.response.token)
                 global.control = res.response
                 global.cookie = {
                     client: res.response.clientId,
                     branch: res.response.branchId,
                     user: res.response.userId,
-                    fullname: res.response.fullname,
+                    fullname: res.response.userFullname,
                 }
-                this._getMenuByToken()
+                login._getMenuByToken().then(() => {
+                    login._getNotification()
+                    login._getNotificationPrivilegeById()
+                })
+                global._listener()
+                emit('connected', res.response)
                 history.replace('/')
             } else {
+                login.input.password = ''
                 const toast = Toaster.create({
                     position: 'top',
                 });
@@ -75,15 +65,25 @@ export const login = observable({
     async _logout() {
         return put('out', { token: Cookies.get('__dys_cookie_control') }).then(res => {
             if (res.status === 200) {
+                emit('logout', global.cookie)
+                Cookies.remove('__dys_cookie_control')
                 socket.removeAllListeners()
                 global.control = {
-                    userid: null,
-                    email: null,
-                    fullname: null,
+                    userId: null,
+                    userEmail: null,
+                    userPassword: null,
+                    userFullname: null,
+                    userSuper: null,
+                    userToken: null,
+                    token: null,
                     clientId: null,
-                    clientname: null,
+                    clientName: null,
+                    clientEmail: null,
+                    clientPhone: null,
+                    clientAddress: null,
+                    clientLogo: null,
                     branchId: null,
-                    branchname: null,
+                    branchName: null,
                 }
                 global.cookie = {
                     client: null,
@@ -91,7 +91,6 @@ export const login = observable({
                     user: null,
                     fullname: null,
                 }
-                Cookies.remove('__dys_cookie_control')
                 history.replace('/login')
             }
         })
@@ -99,17 +98,15 @@ export const login = observable({
     async _checkSession() {
         return get('checkSession', { token: Cookies.get('__dys_cookie_control') }).then(res => {
             if (res.response !== null) {
-                socket.on('connected', msg => {
-                    console.log('[connected]', msg)
-                })
-                emit('connected', res.response)                              
                 global.control = res.response
                 global.cookie = {
                     client: res.response.clientId,
                     branch: res.response.branchId,
                     user: res.response.userId,
-                    fullname: res.response.fullname,
+                    fullname: res.response.userFullname,
                 }                
+                global._listener()                
+                emit('connected', res.response)
             } else {
                 Cookies.remove('__dys_cookie_control')
                 setTimeout(() => history.replace('/login'), 100)
@@ -122,7 +119,36 @@ export const login = observable({
     async _getMenuByToken() {
         return get(`getMenuByToken`, { token: Cookies.get('__dys_cookie_control') }).then(res => {
             if (res.error === null && res.response !== null) {
-                global.menu = res.response
+                global.menu = res.response                
+            }
+        })
+    },
+    async _getNotification() {
+        return get(`getNotification`, {}).then(res => {
+            if (res.error === null && res.response !== null) {
+                global.notification = res.response
+            }
+        })
+    },
+
+    async _getNotificationPrivilegeById() {
+        if (global.menuNotificationOld.length > 0) {
+            global.menuNotificationOld.map(o => socket.off(`${o.menuKey} ${o.menuAction}`))
+        }
+        return get(`getNotificationPrivilegeById`, {}).then(res => {
+            if (res.error === null && res.response !== null) {
+                global.menuNotificationOld = res.response
+                res.response.map(o => {
+                    console.log(`listening event ${o.menuKey} ${o.menuAction}`)
+                    socket.off(`${o.menuKey} ${o.menuAction}`)
+                    socket.on(`${o.menuKey} ${o.menuAction}`, msg => {
+                        if (global.cookie.user !== msg.senderId) {
+                            global.notification.unshift(msg)                            
+                        }
+                        return true
+                    })
+                    return true
+                })
             }
         })
     },
@@ -173,7 +199,7 @@ const TogglePassword = () => (
 const Login = () => (
     <div style={containerStyle}>
         <div className="loginbox">
-            <H4 style={{ color: Colors.INDIGO3, textAlign: 'center' }}>Masuk</H4>
+            <H4 className="primary3" style={{ textAlign: 'center' }}>Masuk</H4>
             <EmailInput />
             <PasswordInput />
             <br />

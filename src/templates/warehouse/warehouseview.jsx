@@ -100,8 +100,7 @@ export const warehouse = observable({
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(warehouse.input)
-        warehouse.input.logDetail = logDetail
+        warehouse.input.logDetail = JSON.stringify(warehouse.input)
         warehouse.loading = true
         return post('warehouse', warehouse.input)
             .then(res => {
@@ -119,8 +118,7 @@ export const warehouse = observable({
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(warehouse.input, warehouse.inputOld)
-        warehouse.input.logDetail = logDetail
+        warehouse.input.logDetail = JSON.stringify(global.getDifference(warehouse.input, warehouse.inputOld))
         warehouse.loading = true
         return put('warehouse', warehouse.input)
             .then(res => {
@@ -164,8 +162,8 @@ class WarehouseView extends PureComponent {
         const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={warehouse.title}
                             btnTooltip={`Tambah ${warehouse.title}`}

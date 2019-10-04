@@ -30,11 +30,11 @@ class DepartmentInput extends PureComponent {
 
         return (
             menu.indexOf(path[2]) !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={`${isAdd ? "Tambah" : "Ubah"} ${department.title}`}
-                            btnTooltip={`Kembali ke list data ${department.title}`}
+                            btnTooltip={`Kembali ke ${department.title}`}
                             btnIcon="delete"
                             color={Colors.RED3}
                             intent="danger"
@@ -76,7 +76,10 @@ class DepartmentInput extends PureComponent {
                                     <Observer>{() =>
                                         <Button
                                             loading={department.loading}
-                                            disabled={department.input.departmentFullname === "" || department.input.departmentEmail === ""}
+                                            disabled={  
+                                                !department.input.departmentCode || department.input.departmentCode === "" ||
+                                                !department.input.departmentName || department.input.departmentName === ""
+                                            }
                                             icon="floppy-disk"
                                             intent={isAdd ? "success" : "warning"}
                                             text={isAdd ? "Tambah" : "Perbarui"}

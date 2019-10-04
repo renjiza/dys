@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { Colors, Button, FormGroup, InputGroup, TextArea, NumericInput } from '@blueprintjs/core';
+import { Colors, Button, FormGroup, InputGroup, TextArea } from '@blueprintjs/core';
 import { Observer, observer } from 'mobx-react';
 
-import { HeaderView, Select } from '../../components/myparts';
+import { HeaderView, Select, NumberGroup } from '../../components/myparts';
 import { PageUnauthorized } from '../../components/async';
 import { product } from './productview';
 import history from '../../components/history';
@@ -33,11 +33,11 @@ class ProductInput extends PureComponent {
 
         return (
             menu.indexOf(path[2]) !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={`${isAdd ? "Tambah" : "Ubah"} ${product.title}`}
-                            btnTooltip={`Kembali ke list data ${product.title}`}
+                            btnTooltip={`Kembali ke ${product.title}`}
                             btnIcon="delete"
                             color={Colors.RED3}
                             intent="danger"
@@ -58,9 +58,8 @@ class ProductInput extends PureComponent {
                                             items={product.store.producttype}
                                             id="producttypeId"
                                             label="producttypeName"
-                                            text={(item) => `${item.producttypeName}`}
-                                            rightText={(item) => `(${item.producttypeCode})`}
-                                            placeholder="Pilih jenis produk"
+                                            text={item => `${item.producttypeName}`}
+                                            rightText={item => `(${item.producttypeCode})`}
                                             disabled={!isAdd}
                                         />
                                     </FormGroup>
@@ -157,11 +156,9 @@ class ProductInput extends PureComponent {
                                         helperText="Rasio terhadap rasio 1"
                                     >
                                         <Observer>{() =>
-                                            <NumericInput
+                                            <NumberGroup
                                                 value={product.input.productRatio2 || 0}
-                                                onValueChange={num => product.input.productRatio2 = num}
-                                                fill
-                                                buttonPosition="none"
+                                                onChange={val => product.input.productRatio2 = val}
                                                 disabled={!isAdd}
                                             />                                            
                                         }</Observer>
@@ -188,11 +185,9 @@ class ProductInput extends PureComponent {
                                         helperText="Rasio terhadap rasio 1"
                                     >
                                         <Observer>{() =>
-                                            <NumericInput
+                                            <NumberGroup
                                                 value={product.input.productRatio3 || 0}
-                                                onValueChange={num => product.input.productRatio3 = num}
-                                                fill
-                                                buttonPosition="none"
+                                                onChange={val => product.input.productRatio3 = val}                                                
                                                 disabled={!isAdd}
                                             />
                                         }</Observer>

@@ -12,7 +12,7 @@ import { toastSuccess, toastError, toastCatch } from '../../components/myparts';
 export const config = observable({
     title: "Konfigurasi Perusahaan",
     loading: false,
-    client: {},
+    client: {},    
     async _getClient() {
         get(`client/${global.cookie.client}`, {}).then(res => {
             config.client = res.response
@@ -39,20 +39,21 @@ export const config = observable({
 class Config extends PureComponent {
 
     componentDidMount() {
+        document.title = `Konfigurasi Perusahaan | ${global.appname}`
         config._getClient()
     }
 
     render() {
         return (
             global.control.super === 1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <div className="wrapHeader">
-                            <H5 style={{ color: Colors.INDIGO3, fontWeight: 600 }}>{config.title}</H5>
+                            <H5 className="primary3" style={{ fontWeight: 600 }}>{config.title}</H5>
                         </div>
 
                         <div className="field" style={{ overflowY: 'auto', maxHeight: 'calc(100% - 34px)' }}>
-                            <Label className="bold text-center" style={{ color: Colors.INDIGO3 }}>Data Perusahaan</Label>
+                            <Label className="bold text-center primray3">Data Perusahaan</Label>
                             <form>
                                 <div className="grid">
                                     <div className="col-lg-5 col-md-5 col-sm-6 col-xs-12">

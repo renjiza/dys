@@ -11,7 +11,7 @@ import global from '../../stores/globalstore';
 
 const styleCardPriv = {
     overflowY: 'auto',
-    height: 190,
+    height: 215,
 }
 
 const styleLabelPriv = {
@@ -45,11 +45,11 @@ class AksesUserInput extends PureComponent {
 
         return (
             menu.indexOf(path[2]) !== -1 ?
-            <div className="dys-paper">
-                <div className="dys-container">
+            <div className="clover-paper">
+                <div className="clover-container">
                     <HeaderView 
                         title={`${isAdd ? "Tambah" : "Ubah"} ${privilege.title}`} 
-                        btnTooltip={`Kembali ke list data ${privilege.title}`} 
+                        btnTooltip={`Kembali ke ${privilege.title}`} 
                         btnIcon="delete" 
                         color={Colors.RED3}
                         intent="danger"

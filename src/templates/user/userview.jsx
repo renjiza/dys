@@ -84,8 +84,7 @@ export const user = observable({
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(user.input)
-        user.input.logDetail = logDetail
+        user.input.logDetail = JSON.stringify(user.input)
         user.loading = true
         return post('user', user.input)
             .then(res => {
@@ -103,8 +102,7 @@ export const user = observable({
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(user.input, user.inputOld)
-        user.input.logDetail = logDetail
+        user.input.logDetail = JSON.stringify(global.getDifference(user.input, user.inputOld))
         user.loading = true
         return put('user', user.input)
             .then(res => {
@@ -148,8 +146,8 @@ class UserView extends PureComponent {
         const currentAcc = acc.filter(o => o.menuKey === 'user').map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={user.title}
                             btnTooltip={`Tambah ${user.title}`}

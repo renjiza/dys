@@ -80,8 +80,7 @@ export const department = observable({
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(department.input)
-        department.input.logDetail = logDetail
+        department.input.logDetail = JSON.stringify(department.input)
         department.loading = true
         return post('department', department.input)
             .then(res => {
@@ -99,8 +98,7 @@ export const department = observable({
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(department.input, department.inputOld)
-        department.input.logDetail = logDetail
+        department.input.logDetail = JSON.stringify(global.getDifference(department.input, department.inputOld))
         department.loading = true
         return put('department', department.input)
             .then(res => {
@@ -144,8 +142,8 @@ class DepartmentView extends PureComponent {
         const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={department.title}
                             btnTooltip={`Tambah ${department.title}`}

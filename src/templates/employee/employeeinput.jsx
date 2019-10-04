@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Colors, Button, FormGroup, InputGroup, TextArea } from '@blueprintjs/core';
 import { Observer, observer } from 'mobx-react';
 
-import { Select, HeaderView, InputDate } from '../../components/myparts';
+import { Select, HeaderView, DateGroup } from '../../components/myparts';
 import { PageUnauthorized } from '../../components/async';
 import { employee } from './employeeview';
 import history from '../../components/history';
@@ -32,11 +32,11 @@ class EmployeeInput extends PureComponent {
 
         return (
             menu.indexOf(path[2]) !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={`${isAdd ? "Tambah" : "Ubah"} ${employee.title}`}
-                            btnTooltip={`Kembali ke list data ${employee.title}`}
+                            btnTooltip={`Kembali ke ${employee.title}`}
                             btnIcon="delete"
                             color={Colors.RED3}
                             intent="danger"
@@ -85,9 +85,8 @@ class EmployeeInput extends PureComponent {
                                             items={employee.store.department}
                                             id="departmentId"
                                             label="departmentName"
-                                            text={(item) => `${item.departmentName}`}
-                                            rightText={(item) => `(${item.departmentCode})`}
-                                            placeholder="Pilih departemen"
+                                            text={item => `${item.departmentName}`}
+                                            textRight={item => `(${item.departmentCode})`}
                                         />
                                     </FormGroup>
                                 </div>
@@ -102,9 +101,8 @@ class EmployeeInput extends PureComponent {
                                             items={employee.store.employment}
                                             id="employmentId"
                                             label="employmentName"
-                                            text={(item) => `${item.employmentName}`}
-                                            rightText={(item) => `(${item.employmentCode})`}
-                                            placeholder="Pilih jabatan"
+                                            text={item => `${item.employmentName}`}
+                                            rightText={item => `(${item.employmentCode})`}
                                         />
                                     </FormGroup>
                                 </div>
@@ -149,8 +147,7 @@ class EmployeeInput extends PureComponent {
                                             items={employee.store.gender}
                                             id="id"
                                             label="label"
-                                            text={(item) => `${item.label}`}
-                                            placeholder="Pilih jenis kelamin"
+                                            text={item => `${item.label}`}
                                         />
                                     </FormGroup>
                                 </div>
@@ -160,10 +157,9 @@ class EmployeeInput extends PureComponent {
                                         labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
                                     >
                                         <Observer>{() =>
-                                            <InputDate                                                
+                                            <DateGroup                                                
                                                 value={employee.input.employeeBirthDate}
                                                 onChange={date => employee.input.employeeBirthDate = date }
-                                                placeholder="dd-mm-yyyy"
                                             />
                                         }</Observer>
                                     </FormGroup>
@@ -210,8 +206,7 @@ class EmployeeInput extends PureComponent {
                                             items={employee.store.identype}
                                             id="id"
                                             label="label"
-                                            text={(item) => `${item.label}`}
-                                            placeholder="Pilih jenis identitas"
+                                            text={item => `${item.label}`}
                                         />
                                     </FormGroup>
                                 </div>
@@ -246,13 +241,11 @@ class EmployeeInput extends PureComponent {
                                 <div className="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                                     <FormGroup
                                         label="Masuk kerja"
-                                        labelInfo={<i style={{ color: Colors.RED3 }}>*</i>}
                                     >
                                         <Observer>{() =>
-                                            <InputDate
+                                            <DateGroup
                                                 value={employee.input.employeeInDate}
                                                 onChange={date => employee.input.employeeInDate = date}
-                                                placeholder="dd-mm-yyyy"
                                             />
                                         }</Observer>
                                     </FormGroup>
@@ -263,7 +256,20 @@ class EmployeeInput extends PureComponent {
                                     <Observer>{() =>
                                         <Button
                                             loading={employee.loading}
-                                            disabled={employee.input.employeeFullname === "" || employee.input.employeeEmail === ""}
+                                            disabled={
+                                                !employee.input.employeeCode || employee.input.employeeCode === "" ||
+                                                !employee.input.employeeName || employee.input.employeeName === "" ||
+                                                !employee.input.employeeDepartmentId || employee.input.employeeDepartmentId === "" ||
+                                                !employee.input.employeeEmploymentId || employee.input.employeeEmploymentId === "" ||
+                                                !employee.input.employeeEmail || employee.input.employeeEmail === "" ||
+                                                !employee.input.employeePhone || employee.input.employeePhone === "" ||
+                                                !employee.input.employeeGender || employee.input.employeeGender === "" ||
+                                                !employee.input.employeeBirthDate || employee.input.employeeBirthDate === "" ||
+                                                !employee.input.employeeBirthPlace || employee.input.employeeBirthPlace === "" ||
+                                                !employee.input.employeeAddress || employee.input.employeeAddress === "" ||
+                                                !employee.input.employeeIdentityType || employee.input.employeeIdentityType === "" ||
+                                                !employee.input.employeeGraduate || employee.input.employeeGraduate === ""
+                                            }
                                             icon="floppy-disk"
                                             intent={isAdd ? "success" : "warning"}
                                             text={isAdd ? "Tambah" : "Perbarui"}

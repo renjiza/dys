@@ -7,6 +7,7 @@ import { HeaderView, TableView, ToolView, toastCatch, toastSuccess, toastError }
 import { PageUnauthorized } from '../../components/async';
 import history from '../../components/history';
 import global from '../../stores/globalstore';
+import { login } from '../login';
 
 
 export const privilege = observable({
@@ -46,8 +47,8 @@ export const privilege = observable({
             userFullname, 
             privilegeArrayMenuId`,
         filter: '',
-        order: 'userEmail',
-        orderLabel: 'Email',
+        order: 'userFullname',
+        orderLabel: 'Nama Lengkap',
         sort: 'asc',
     },
     body: [],
@@ -79,15 +80,17 @@ export const privilege = observable({
             .catch(toastCatch)
     },
     async _update() {
-        const logDetail = global.takeDiff(privilege.input, privilege.inputOld)
+        privilege.input.logDetail = JSON.stringify(global.getDifference(privilege.input, privilege.inputOld))
         privilege.input.privilegeArrayMenuId = JSON.stringify(Object.entries(privilege.store.raw).map(([key, value]) => value && parseFloat(key)).filter(x => x !== false))
-        privilege.input.logDetail = logDetail
         privilege.loading = true
         return put('privilege', privilege.input)
             .then(res => {
                 privilege.loading = false
                 if (res.error === null) {
                     toastSuccess(res.response)
+                    if (global.cookie.user === privilege.input.userId) {
+                        login._getMenuByToken()
+                    }
                     privilege.input = {}
                     privilege.store.raw = {}
                     history.replace('/privilege/view')
@@ -122,8 +125,8 @@ class AksesUserView extends PureComponent {
         const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={privilege.title}
                             btnTooltip={`Tambah ${privilege.title}`}

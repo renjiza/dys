@@ -5,7 +5,7 @@ import { Spinner } from '@blueprintjs/core';
 const LoadingIndicator = () => {
     document.title = 'Memuat halaman ...'
     return (
-        <div className="dys-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)', backgroundColor: 'rgba(16,22,26,.1)' }}>
+        <div className="clover-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)', backgroundColor: 'rgba(16,22,26,.1)' }}>
             <Spinner intent="primary" size={70} />    
         </div>
     )
@@ -14,7 +14,7 @@ const LoadingIndicator = () => {
 const PageNotFound = () => {
     document.title = '404 - Halaman tidak ditemukan'
     return (
-        <div className="dys-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)' }}>
+        <div className="clover-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)' }}>
             <div style={{ fontSize: 50, fontWeight: 'bold' }}>404</div>
             Halaman tidak ditemukan
         </div>
@@ -24,7 +24,7 @@ const PageNotFound = () => {
 export const PageUnauthorized = () => {
     document.title = '401 - Halaman diblokir'
     return (
-        <div className="dys-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)' }}>
+        <div className="clover-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)' }}>
             <div style={{ fontSize: 50, fontWeight: 'bold' }}>401</div>
             Halaman diblokir karena anda tidak mempunyai akses ke halaman ini
         </div>
@@ -38,10 +38,6 @@ export class Async extends PureComponent {
         this.state = {
             Module: null
         }
-    }    
-    
-    componentWillReceiveProps(curr, next) {
-        console.log(curr, next)
     }
 
     async componentWillMount() {
@@ -58,12 +54,17 @@ export class Async extends PureComponent {
                     .then(Module => this.setState({ Module: Module.default }))
                     .catch((e) => { console.log(e); this.setState({ Module: PageNotFound }) })
             break;
-            case (params.type === "view"):
+            case (params.type === 'view'):
                 await import(`../templates/${params.module}/${params.module}view`)
                     .then(Module => this.setState({ Module: Module.default }))
                     .catch((e) => { console.log(e); this.setState({ Module: PageNotFound }) })
             break;
-            case (params.type === "add" || params.type === "edit"):
+            case (params.type === 'detail'):
+                await import(`../templates/${params.module}/${params.module}detail`)
+                    .then(Module => this.setState({ Module: Module.default }))
+                    .catch((e) => { console.log(e); this.setState({ Module: PageNotFound }) })
+            break;   
+            case (params.type === 'add' || params.type === 'edit'):
                 await import(`../templates/${params.module}/${params.module}input`)
                     .then(Module => this.setState({ Module: Module.default }))
                     .catch((e) => { console.log(e); this.setState({ Module: PageNotFound }) })

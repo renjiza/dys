@@ -80,8 +80,7 @@ export const producttype = observable({
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(producttype.input)
-        producttype.input.logDetail = logDetail
+        producttype.input.logDetail = JSON.stringify(producttype.input)
         producttype.loading = true
         return post('producttype', producttype.input)
             .then(res => {
@@ -99,8 +98,7 @@ export const producttype = observable({
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(producttype.input, producttype.inputOld)
-        producttype.input.logDetail = logDetail
+        producttype.input.logDetail = JSON.stringify(global.getDifference(producttype.input, producttype.inputOld))
         producttype.loading = true
         return put('producttype', producttype.input)
             .then(res => {
@@ -144,8 +142,8 @@ class ProductTypeView extends PureComponent {
         const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={producttype.title}
                             btnTooltip={`Tambah ${producttype.title}`}

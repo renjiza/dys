@@ -110,8 +110,7 @@ export const vendor = observable({
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(vendor.input)
-        vendor.input.logDetail = logDetail
+        vendor.input.logDetail = JSON.stringify(vendor.input)
         vendor.loading = true
         return post('vendor', vendor.input)
             .then(res => {
@@ -129,8 +128,7 @@ export const vendor = observable({
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(vendor.input, vendor.inputOld)
-        vendor.input.logDetail = logDetail
+        vendor.input.logDetail = JSON.stringify(global.getDifference(vendor.input, vendor.inputOld))
         vendor.loading = true
         return put('vendor', vendor.input)
             .then(res => {
@@ -174,8 +172,8 @@ class VendorView extends PureComponent {
         const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={vendor.title}
                             btnTooltip={`Tambah ${vendor.title}`}

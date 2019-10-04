@@ -1,7 +1,0 @@
-* src/common/
-_color_aliasses.scss
-_mixin.scss
-
-
-* src/components/button/
-_common.scss

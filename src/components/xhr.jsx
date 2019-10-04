@@ -1,17 +1,15 @@
 import global from '../stores/globalstore';
 import io from 'socket.io-client';
 
-// export const apiUrl = 'http://myapi.dys-resources.com'
-export const apiUrl = 'http://localhost:13131'
+// export const apiUrl = 'http://myapi.clover-resources.com'
+// export const apiUrl = 'http://localhost:13131'
+// export const apiUrl = 'http://192.168.43.58:13131'
+export const apiUrl = 'http://192.168.0.154:13131'
 
-export const socket = io(apiUrl);
+export const socket = io(apiUrl)
  
 export const emit = (event, args) => {
     return socket.emit(event, { ...args, ...global.cookie })
-}
-
-export function separator(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
 export const get = async (requestUrl, params) => {

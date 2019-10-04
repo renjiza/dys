@@ -30,11 +30,11 @@ class ProductTypeInput extends PureComponent {
 
         return (
             menu.indexOf(path[2]) !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={`${isAdd ? "Tambah" : "Ubah"} ${producttype.title}`}
-                            btnTooltip={`Kembali ke list data ${producttype.title}`}
+                            btnTooltip={`Kembali ke ${producttype.title}`}
                             btnIcon="delete"
                             color={Colors.RED3}
                             intent="danger"

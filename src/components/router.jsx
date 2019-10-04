@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 
 import { Async } from './async';
 import Login from '../templates/login';
-import { Colors } from '@blueprintjs/core';
 
 export const getSession = () => {
     const jwt = Cookies.get('__dys_cookie_control')
@@ -31,11 +30,11 @@ const ManagerRoute = props => {
     return (
         getSession() && publicPath.indexOf(location.pathname) === -1 ?
             <Route {...props} /> :            
-            <div className="dys-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)' }}>
+            <div className="clover-container" style={{ textAlign: 'center', paddingTop: 'calc(50vh - 70px)' }}>
                 <div style={{ fontSize: 50, fontWeight: 'bold' }}>401</div>
                 <div>
                     Sesi login anda berakhir, 
-                    Silakan <Link to="/login" style={{ color: Colors.INDIGO3, fontWeight: 'bold' }}>klik disini</Link> untuk login
+                    Silakan <Link to="/login" className="primary3" style={{ fontWeight: 'bold' }}>klik disini</Link> untuk login
                 </div>
             </div>
     )
@@ -47,7 +46,7 @@ class Router extends React.PureComponent {
         return (
             // <TransitionGroup>
             //     <CSSTransition key={location.pathname} classNames="bounce" timeout={500}>
-            //         <div className="dys-container-style">
+            //         <div className="clover-container-style">
                         <Switch location={location}>
                             <Route path="/login" component={Login} />
                             <ManagerRoute exact path={`/:module?/:type?/:id?`} render={props => <Async key={location.pathname} param={props} />} />

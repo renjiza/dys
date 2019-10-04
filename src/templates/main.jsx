@@ -11,8 +11,8 @@ class Dashboard extends PureComponent {
 
     render() {
         return (
-            <div className="dys-container">
-                Hallo, <Observer>{() => global.control.fullname}</Observer> !
+            <div className="clover-container">
+                Hallo, <Observer>{() => global.control.userFullname}</Observer> !
             </div>
         );
     }

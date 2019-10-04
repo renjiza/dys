@@ -111,8 +111,7 @@ export const customer = observable({
             .catch(toastCatch)
     },
     async _create() {
-        const logDetail = JSON.stringify(customer.input)
-        customer.input.logDetail = logDetail
+        customer.input.logDetail = JSON.stringify(customer.input)
         customer.loading = true
         return post('customer', customer.input)
             .then(res => {
@@ -130,15 +129,14 @@ export const customer = observable({
             })
     },
     async _update() {
-        const logDetail = global.takeDiff(customer.input, customer.inputOld)
-        customer.input.logDetail = logDetail
+        customer.input.logDetail = JSON.stringify(global.getDifference(customer.input, customer.inputOld))
         customer.loading = true
         return put('customer', customer.input)
             .then(res => {
                 customer.loading = false
                 if (res.error === null) {
                     toastSuccess(res.response)
-                    customer.input = {}
+                    customer.input = {} 
                     history.replace('/customer/view')
                 } else {
                     toastError(res.error)
@@ -175,8 +173,8 @@ class CustomerView extends PureComponent {
         const currentAcc = acc.map(o => o.menuAction)
         return (
             currentAcc.indexOf('view') !== -1 ?
-                <div className="dys-paper">
-                    <div className="dys-container">
+                <div className="clover-paper">
+                    <div className="clover-container">
                         <HeaderView
                             title={customer.title}
                             btnTooltip={`Tambah ${customer.title}`}
